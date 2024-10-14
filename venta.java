@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Venta {
     private int idVenta;
-    private ArrayList<String> productosVendidos;
+    private ArrayList<Producto> productosVendidos;
     private double totalVenta;
     private LocalDateTime fechaHora;
 
@@ -11,6 +11,7 @@ public class Venta {
         this.idVenta=idVenta;
         this.productosVendidos=new ArrayList<>();
         this.fechaHora=LocalDateTime.now();
+        this.totalVenta=0.0;
 
     }
     
@@ -22,12 +23,13 @@ public class Venta {
         this.idVenta = idVenta;
     }
 
-    public ArrayList<String> getProductosVendidos(){
+    public ArrayList<Producto> getProductosVendidos(){
         return productosVendidos;
     }
 
-    public void setProductosVendidos(ArrayList<String> productosVendidos){
+    public void setProductosVendidos(ArrayList<Producto> productosVendidos){
         this.productosVendidos = productosVendidos;
+        calcularTotalVenta();
     }
 
     public double getTotalVenta(){
@@ -45,6 +47,25 @@ public class Venta {
     public void setFechaHora(LocalDateTime fechaHora){
         this.fechaHora = fechaHora;
     }
+
+    public void agregarProducto(Producto producto){
+        productosVendidos.add(producto);
+        calcularTotalVenta();
+    }
+
+    private void calcularTotalVenta(){
+        totalVenta=0.0;
+        for(Producto producto: productosVendidos){
+            totalVenta+=producto.getPrecio();
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Producto [ÍDVenta = " + idVenta + ", Valor Total Venta = " + totalVenta + ", Fecha y Hora = " + fechaHora +  "]";
+
+    }
+
 
 
 

@@ -54,6 +54,20 @@ public class Producto {
         this.cantidadStock = cantidadStock;
     }
 
+    public void ajustarStock(int cantidad){
+        if (cantidadStock + cantidad >= 0 ) {
+            cantidadStock += cantidad;
+        } else {
+            System.out.println("No puedes restar" + cantidad + " unidades, stock induficiente");
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Producto [ÍD = " + id + ", NombreProducto = " + nombreProducto + ", Descripcion = " + descripcion + ", Precio = " + precio +", Stock = " + cantidadStock + "]";
+
+    }
+
 
 }
 
