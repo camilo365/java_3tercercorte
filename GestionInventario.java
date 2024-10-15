@@ -61,6 +61,51 @@ public class GestionInventario{
 
     }
 
+    public void modificarProducto(Scanner scanner){
+        System.out.println("------------------------Modificar Producto------------------");
+
+        System.out.print("Dame el ID del producto que quieres modificar");
+        int idProducto = scanner.nextInt();
+        scanner.nextLine();
+
+        Producto productoAModificar = null;
+        for (Producto producto : inventario){
+            if (producto.getId() == idProducto){
+                productoAModificar = producto;
+                break;
+            }
+        }
+
+        if(productoAModificar != null){
+            System.out.println("Producto encontrado : " + productoAModificar);
+        }
+        System.out.print("Introduce el nuevo nombre (Si no lo quieres cambiar deja vacio este campo)");
+        String nuevoNombre = scanner.nextLine();
+        if (!nuevoNombre.isEmpty()) {
+            productoAModificar.setNombreProducto(nuevoNombre);
+        }
+
+        System.out.print("Introduce la nueva descripción (deja vacío si no deseas cambiarla): ");
+        String nuevaDescripcion = scanner.nextLine();
+        if (!nuevaDescripcion.isEmpty()) {
+            productoAModificar.setDescripcion(nuevaDescripcion);
+        }
+
+        System.out.print("Introduce el nuevo precio (deja 0 si no deseas cambiarlo): ");
+        double nuevoPrecio = scanner.nextDouble();
+        if (nuevoPrecio > 0) {
+            productoAModificar.setPrecio(nuevoPrecio);
+        }
+
+        System.out.print("Introduce la nueva cantidad en stock (deja -1 si no deseas cambiarla): ");
+        int nuevaCantidadStock = scanner.nextInt();
+        if (nuevaCantidadStock >= 0) {
+            productoAModificar.setCantidadStock(nuevaCantidadStock);
+        }
+
+        System.out.println("Producto modificado exitosamente:");
+        System.out.println(productoAModificar);
+    }
 
 }
 
