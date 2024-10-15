@@ -33,10 +33,9 @@ public class Usuario {
         this.rol = rol;
     }
 
-    public boolean VerificarPassword(){
-        return this.password.equals(password);
+    public boolean VerificarUsuario(String nombreUsuario, String password) {
+        return this.nombreUsuario.equals(nombreUsuario) && this.password.equals(password);
     }
-
     @Override
     public String toString() {
         return "Producto [Usuario = " + nombreUsuario + ", Password = " + password + ", Rol = " + rol +  "]";

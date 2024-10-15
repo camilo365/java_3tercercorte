@@ -12,7 +12,7 @@ public class Informe {
     public void generarInformeInventario(ArrayList<Producto>productos){
         System.out.println("*************  Informe De Inventario *****************");
         for (Producto producto : productos){
-            System.out.println("Producto" + producto.getNombreProducto() + "Cantidad Stock" + producto.getCantidadStock() + "Precio" + producto.getPrecio());
+            System.out.println(producto.toString());
         }
 
         System.out.println("**********************************");

@@ -5,12 +5,26 @@ public class Main {
 
         Usuario admin = new Usuario("admin","admin123","administrador");
         Usuario vendedor = new Usuario("vendedor1","vendedor123","vendedor");
+        Usuario gerente = new Usuario("gerente","gerente123","gerente");
 
-        System.out.println("Sistema Verificando Contraseña");
-        if (admin.VerificarPassword()){
-            System.out.println("Contraseña correcta para el usuario: " + admin.getNombreUsuario());
-        } else {
-            System.out.println("Contraseña incorrecta para el usuario: " + admin.getNombreUsuario());
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Introduce el nombre de usuario:");
+        String nombreUsuario = scanner.nextLine();
+        System.out.println("Introduce la contraseña:");
+        String password = scanner.nextLine();
+
+        Usuario usuarioActual = null;
+        if (admin.VerificarUsuario(nombreUsuario, password)) {
+            usuarioActual = admin;
+        } else if (vendedor.VerificarUsuario(nombreUsuario, password)) {
+            usuarioActual = vendedor;
+        } else if (gerente.VerificarUsuario(nombreUsuario, password)) {
+            usuarioActual = gerente;
+        }
+
+        if (usuarioActual == null) {
+            System.out.println("Acceso denegado. Usuario o contraseña incorrectos.");
+            return;
         }
 
         Producto P1 = new Producto(01,"Parlantes","Nuestros parlantes cuentan con un diseño elegante, que se adapta a cualquier espacio. Con una potencia adecuada y tecnología de última generación.",65.000,10);
@@ -43,15 +57,21 @@ public class Main {
     
     
     boolean ejecutar= true;
-    Scanner scanner = new Scanner(System.in);
 
     while (ejecutar){
-        System.out.println(":::::::::::::::: Menu PPal ::::::::::::::::::::::::::::::");
-        System.out.println("1. Ver inventario ");
-        System.out.println("2. Realizar Venta");
-        System.out.println("3. Generar informe de ventas");
-        System.out.println("4. Generar informe de inventario");
-        System.out.println("5. Salir!!!");
+        System.out.println(":::::::::::::::: Menú Principal ::::::::::::::::::::::::::::");
+            System.out.println("1. Ver inventario");
+
+            if (usuarioActual.getRol().equals("administrador") || usuarioActual.getRol().equals("vendedor")) {
+                System.out.println("2. Realizar Venta");
+            }
+            if (usuarioActual.getRol().equals("administrador") || usuarioActual.getRol().equals("gerente")) {
+                System.out.println("3. Generar informe de ventas");
+                System.out.println("4. Generar informe de inventario");
+            }
+            System.out.println("5. Salir");
+        
+        
         System.out.println(" Selecciona una opcion ");
         int opcion = scanner.nextInt();
 
@@ -64,39 +84,48 @@ public class Main {
             break;
 
             case 2:
-            System.out.println("Introduce el ID del producto a vender:");
-            int idProducto = scanner.nextInt();
-            Producto productoAVender = null;
+            if (usuarioActual.getRol().equals("administrador") || usuarioActual.getRol().equals("vendedor")) {
+                System.out.println("Introduce el ID del producto a vender:");
+                int idProducto = scanner.nextInt();
+                Producto productoAVender = null;
 
-            for (Producto producto : inventario ){
-                if (producto.getId() == idProducto){
-                    productoAVender=producto;
-                    break;
+                for (Producto producto : inventario) {
+                    if (producto.getId() == idProducto) {
+                        productoAVender = producto;
+                        break;
+                    }
                 }
 
-            }
-
-            if (productoAVender != null && productoAVender.getCantidadStock() >0){
-                Venta nuevaVenta = new Venta(ventas.size() + 1);
-                nuevaVenta.agregarProducto(productoAVender);
-                ventas.add(nuevaVenta);
-                productoAVender.ajustarStock(-1);
-                System.out.println("Venta Exitosa");
-
+                if (productoAVender != null && productoAVender.getCantidadStock() > 0) {
+                    Venta nuevaVenta = new Venta(ventas.size() + 1);
+                    nuevaVenta.agregarProducto(productoAVender);
+                    ventas.add(nuevaVenta);
+                    productoAVender.ajustarStock(-1);
+                    System.out.println("Venta Exitosa");
+                } else {
+                    System.out.println("Producto no encontrado o sin stock");
+                }
             } else {
-                System.out.println("Producto no encontrado o sin Stock");
-
+                System.out.println("Acceso denegado. No tienes permisos para realizar ventas.");
             }
             break;
 
             case 3:
-            System.out.println("Generar informe de ventas");
-            informe.generarInformeVentas(ventas);
+            if (usuarioActual.getRol().equals("administrador") || usuarioActual.getRol().equals("gerente")) {
+                System.out.println("Generando informe de ventas...");
+                informe.generarInformeVentas(ventas);
+            } else {
+                System.out.println("Acceso denegado. No tienes permisos para generar informes de ventas.");
+            }
             break;
 
             case 4:
-            System.out.println("Generar informe de inventario");
-            informe.generarInformeInventario(inventario);
+            if (usuarioActual.getRol().equals("administrador") || usuarioActual.getRol().equals("gerente")) {
+                System.out.println("Generando informe de inventario...");
+                informe.generarInformeInventario(inventario);
+            } else {
+                System.out.println("Acceso denegado. No tienes permisos para generar informes de inventario.");
+            }
             break;
 
             case 5:
@@ -113,7 +142,6 @@ public class Main {
         }
 
         scanner.close();
-
 
     }
 
